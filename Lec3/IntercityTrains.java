@@ -1,4 +1,4 @@
-package Trains;
+package Lec3;
 
 import java.util.ArrayList;
 
