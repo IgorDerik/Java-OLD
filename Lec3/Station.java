@@ -1,26 +1,34 @@
 package Lec3;
 
+import java.time.LocalTime;
+
 /*
-TO BE DONE SOON
-*/
+This is not final version
+ */
 
 public class Station {
 
     private String name;
 
-    private int arrivalTime;
-    private int departureTime;
+    private LocalTime arrivalTime;
+    private LocalTime departureTime;
 
-    private String timeFull; //experimental
-
-    public Station(String name, String timeFull) {
-        this.name = name;
-        this.timeFull = timeFull;
+    public String getName() {
+        return name;
     }
 
-    public Station(String name, int arrivalTime, int departureTime) {
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public Station(String name, LocalTime arrivalTime, LocalTime departureTime) {
         this.name = name;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
     }
+
 }
