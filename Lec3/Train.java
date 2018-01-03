@@ -1,6 +1,7 @@
 package Lec3;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Random;
 
 /*
@@ -9,9 +10,16 @@ This is not final version
 
 public class Train {
 
-    public Train(int id, Station[] stations) {
+    public Train(int id, Station[] stations, boolean isBack) {
+
         this.id = id;
-        this.stations = stations;
+
+        if(isBack) {
+            this.stations = reverseStations(stations);
+        }
+        else {
+            this.stations = stations;
+        }
 
         Random random = new Random();
         availableSeats = 1+random.nextInt(100);
@@ -31,16 +39,27 @@ public class Train {
         return availableSeats;
     }
 
-    public boolean isNearestFromNow (String location) {
+    public Station[] getStations() {
+        return stations;
+    }
 
-        boolean result = false;
+    public int isNearestFromNow (String location) {
 
-        for (Station station : stations) {
+//        boolean result = false;
+        int result = -1;
+//        Station result = null;
 
-            if(location.equals(station.getName())) {
+//        for (Station station : stations) {
+        for (int i=0; i<stations.length; i++) {
 
-                if(station.getDepartureTime().isAfter(LocalTime.now())) {
-                    result = true;
+            if(location.equals(stations[i].getName())) {
+//            if(location.equals(station.getName())) {
+
+                if(stations[i].getDepartureTime().isAfter(LocalTime.now())) {
+//                if(station.getDepartureTime().isAfter(LocalTime.now())) {
+//                    result = true;
+                    result = i;
+//                    result = station;
 
 //                    System.out.print(station.getName()+" ");
 //                    System.out.print(station.getArrivalTime() + " ");
@@ -98,5 +117,28 @@ public class Train {
         }
 
         return result;
+    }
+
+    private Station[] reverseStations(Station[] stations) {
+
+        Station[] reverse = new Station[stations.length];
+
+        for (int i=0; i<reverse.length; i++) {
+            Station station = stations[stations.length-1-i];
+            reverse[i] = new Station(station.getName(), station.getArrivalTimeBack(), station.getDepartureTimeBack());
+            station.setArrivalTimeBack(null);
+            station.setDepartureTimeBack(null);
+        }
+
+        return reverse;
+    }
+
+    @Override
+    public String toString() {
+        return "Train{" +
+                "id=" + id +
+                ", stations=" + Arrays.toString(stations) +
+                "\navailableSeats=" + availableSeats +
+                '}'+"\n";
     }
 }
