@@ -2,7 +2,7 @@ package Lec4;
 
 /*
 1 and 2 Tasks
-Final version
+Not Final
 */
 
 import java.io.BufferedReader;
