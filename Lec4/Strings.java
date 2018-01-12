@@ -1,5 +1,10 @@
 package Lec4;
 
+/*
+1 and 2 Tasks
+Final version
+*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
