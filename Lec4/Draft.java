@@ -2,7 +2,7 @@ package Lec4;
 
 /*
 This code in process
-*/
+ */
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -105,12 +105,47 @@ public class Main {
     }
 
     private static StringBuilder getRightLine (StringBuilder stringBuilder, int lineLength) {
+/*
+        int newLineIndex = 0;
+        while (newLineIndex!=stringBuilder.lastIndexOf("\n")) {
+            newLineIndex = stringBuilder.indexOf("\n",newLineIndex+1);
+            System.out.println(newLineIndex);
+        }
+*/
+        StringBuilder builder = new StringBuilder();
+        String[] inputStrings = stringBuilder.toString().split("\n");
 
-//        String[] strings = stringBuilder.toString().split("\n");
+        for (String string : inputStrings) {
 
-        
-        
-        return null;
+            if (string.length() < lineLength) {
+                builder.append(string);
+                builder.append("\n");
+            }
+
+            if (string.length() > lineLength) {
+                StringBuilder newLineBuilder = new StringBuilder(string);
+                newLineBuilder.insert(lineLength-1,"\n");
+                builder.append(newLineBuilder);
+                builder.append("\n");
+            }
+
+        }
+
+        return builder;
+        /*
+        String[] inputStrings = stringBuilder.toString().split("\n");
+
+//        String[] outputStrings = new String[inputStrings.length];
+
+        for (int i=0; i<inputStrings.length; i++) {
+            //outputStrings[i] = getRightLine(inputStrings[i],lineLength);
+            inputStrings[i] = getRightLine(inputStrings[i],lineLength);
+        }
+
+  //      return outputStrings;
+        return inputStrings;
+        */
+//        return null;
     }
 
     private static String getRightLine (String string, int lineLength) {
@@ -129,13 +164,13 @@ public class Main {
         }
         else if (string.length() > lineLength) {
 
-//            stringBuilder.insert(lineLength-1,"\n");
-//            stringBuilder.insert(string.length()-1,"\n");
-
+            stringBuilder.insert(lineLength-1,"\n");
+            stringBuilder.insert(string.length()-1,"\n");
+/*
             for(int i = lineLength-1; i < (string.length() / lineLength); i=i+lineLength) {
                 stringBuilder.insert(i,"\n");
             }
-
+*/
             return stringBuilder.toString();
         }
         else {
@@ -147,15 +182,17 @@ public class Main {
 
         StringBuilder text = readText();
 
+        System.out.println(getRightLine(text,100));
         /*
-        String[] strings = getRightLine(text,0);
+        StringBuilder text = readText();
+
+        String[] strings = getRightLine(text,100);
 
         for (String s : strings) {
-
-            System.out.print(s);
-
+            System.out.println(s);
         }
         */
+
 //        System.out.println( getNoDupLettersLine( readText() ));
         /*
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
