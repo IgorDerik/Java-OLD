@@ -1,16 +1,79 @@
 package Lec4;
 
-/*
-1 and 2 Tasks
-Not Final
-*/
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
+/*
+Program gives you an interactive choose what to do, just run main method and fun)
+ */
+
 public class Strings {
+
+    private static String readText() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        System.out.println("Write/Paste a text (and press ENTER), after that print q (and press ENTER again) to end a program!");
+
+        Scanner scanner = new Scanner(System.in);
+
+        String input;
+
+        while (true) {
+            input = scanner.nextLine();
+
+            if(input.equals("q")) break;
+
+            stringBuilder.append(input);
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private static String addSpaces(String string, int lineLen) {
+
+        int stringLen = string.length();
+
+        StringBuilder spaceBuilder = new StringBuilder();
+
+        if (stringLen < lineLen) {
+            for (int i = 0; i < (lineLen - stringLen); i++) {
+                spaceBuilder.append(" ");
+            }
+        }
+
+        return spaceBuilder.append(string).toString();
+    }
+
+    private static String[] alignToRightEdge(String string, int lineLen) {
+
+        StringBuilder builder = new StringBuilder(string);
+
+        int newLineIndex = lineLen;
+
+        while ( (string.length()-newLineIndex) > 0 ) {
+
+            if (builder.substring(newLineIndex-lineLen,newLineIndex).contains(" ")) {
+                while (builder.charAt(newLineIndex) != ' ') {
+                    newLineIndex--;
+                }
+            }
+
+            builder.replace(newLineIndex,newLineIndex+1,"\n");
+
+            newLineIndex = newLineIndex+lineLen;
+
+//            System.out.println(string.length()-newLineIndex);
+        }
+
+        String[] strings = builder.toString().split("\n");
+
+        for(int i=0; i<strings.length; i++) {
+            strings[i] = addSpaces(strings[i],lineLen);
+        }
+
+        return strings;
+    }
 
     private static String getNoDupLettersLine (String string) {
 
@@ -26,60 +89,7 @@ public class Strings {
         return stringBuilder.toString();
     }
 
-    private static void readPrintText() {
-        readPrintText(false,false,0);
-    }
-
-    private static void readPrintText(boolean printNoDupText) {
-        readPrintText(printNoDupText, false, 0);
-    }
-
-    private static void readPrintText(boolean printRight, int spaces) {
-        readPrintText(false, printRight, spaces);
-    }
-
-    private static void readPrintText(boolean printNoDupText, boolean printRight, int spaces) {
-
-        System.out.println("Write/Paste a text and print q letter to end a program!");
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            String input = scanner.nextLine();
-
-            if(input.equals("q")) break;
-
-            if(printNoDupText && !printRight) {
-                System.out.println(getNoDupLettersLine(input));
-            }
-            else if(printRight && !printNoDupText) {
-                System.out.println(getRightLine(input,spaces));
-            }
-            else if (printNoDupText) {
-                String toBePrinted = getRightLine(getNoDupLettersLine(input), spaces);
-                System.out.println(toBePrinted);
-            }
-            else {
-                System.out.println(input);
-            }
-        }
-    }
-
-    private static String getRightLine (String string, int numberOfSpaces) {
-
-        StringBuilder spaces = new StringBuilder();
-        StringBuilder stringBuilder = new StringBuilder(string);
-
-        for(int i=0; i<numberOfSpaces; i++) {
-            spaces.append(" ");
-        }
-
-        return spaces.append(stringBuilder).toString();
-    }
-
-    public static void main(String[] args) throws IOException{
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) {
 
         System.out.println("Choose an operation: \n" +
                 "0 Just read and print a text; \n" +
@@ -87,27 +97,37 @@ public class Strings {
                 "2 Print and align the text to the right edge; \n" +
                 "3 Print and align the text to the right edge without the duplicates letters \n");
 
-        String choose = reader.readLine();
+        Scanner scanner = new Scanner(System.in);
+        int choose = scanner.nextInt();
 
-        int spaces = 0;
-        if(choose.equals("2") || choose.equals("3")) {
-            System.out.println("Enter number of spaces: ");
-            spaces = Integer.parseInt(reader.readLine());
+        int lineLen = 0;
+        if(choose==2 || choose==3) {
+            System.out.println("Please enter a number of characters in line: ");
+            lineLen = scanner.nextInt();
         }
 
         switch (choose) {
-            case "0": readPrintText();
-            break;
-            case "1": readPrintText(true);
-            break;
-            case "2": readPrintText(true,spaces);
-            break;
-            case "3": readPrintText(true,true,spaces);
-            break;
+            case 0:
+                System.out.println(readText());
+                break;
+            case 1:
+                System.out.println(getNoDupLettersLine(readText()));
+                break;
+            case 2:
+                String[] strings = alignToRightEdge(readText(),lineLen);
+                for (String string : strings) {
+                    System.out.println(string);
+                }
+                break;
+            case 3:
+                String[] noDupLetterStrings = alignToRightEdge(getNoDupLettersLine(readText()),lineLen);
+                for (String string : noDupLetterStrings) {
+                    System.out.println(string);
+                }
+                break;
             default:
                 System.out.println("Your choose is invalid.");
         }
     }
 
 }
-
