@@ -1,5 +1,6 @@
 package Lec4;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -21,16 +22,18 @@ public class Strings {
         while (true) {
             input = scanner.nextLine();
 
-            if(input.equals("q")) break;
+            if(input.equals("q")) break; // breaking program if user entered a q letter
 
             stringBuilder.append(input);
             stringBuilder.append("\n");
         }
 
+        stringBuilder.deleteCharAt(stringBuilder.length()-1); //delete last new line char
+
         return stringBuilder.toString();
     }
 
-    private static String addSpaces(String string, int lineLen) {
+    private static String addSpaces(String string, int lineLen) { //adding spaces for future aligning to the right
 
         int stringLen = string.length();
 
@@ -45,31 +48,38 @@ public class Strings {
         return spaceBuilder.append(string).toString();
     }
 
-    private static String[] alignToRightEdge(String string, int lineLen) {
+    private static String[] alignToRightEdge(String string, int lineLen) { //aligning method
 
         StringBuilder builder = new StringBuilder(string);
 
+        /*
+        First we should cut a string based on line length given by user
+         */
+
         int newLineIndex = lineLen;
 
-        while ( (string.length()-newLineIndex) > 0 ) {
+        while ( (string.length()-newLineIndex) > 0 ) { //while we have lines to cut
 
+            /*
+            if we have a space before line should finish, it better to cut there, to avoid cutting words
+             */
             if (builder.substring(newLineIndex-lineLen,newLineIndex).contains(" ")) {
-                while (builder.charAt(newLineIndex) != ' ') {
+                while (builder.charAt(newLineIndex) != ' ') { //looking for a space
                     newLineIndex--;
                 }
             }
 
-            builder.replace(newLineIndex,newLineIndex+1,"\n");
+            builder.replace(newLineIndex,newLineIndex+1,"\n"); //replacing a space to a new line
 
             newLineIndex = newLineIndex+lineLen;
 
 //            System.out.println(string.length()-newLineIndex);
         }
 
-        String[] strings = builder.toString().split("\n");
+        String[] strings = builder.toString().split("\n"); //splitting our big line to an array
 
         for(int i=0; i<strings.length; i++) {
-            strings[i] = addSpaces(strings[i],lineLen);
+            strings[i] = addSpaces(strings[i],lineLen); //adding spaces to finish aligning
         }
 
         return strings;
@@ -80,22 +90,53 @@ public class Strings {
         StringBuilder stringBuilder = new StringBuilder(string);
 
         for (int i = 0; i < stringBuilder.length() - 1; i++) {
-            if ( stringBuilder.charAt(i) == stringBuilder.charAt(i + 1) ) {
-                stringBuilder.deleteCharAt(i);
-                i--;
+            if ( stringBuilder.charAt(i) == stringBuilder.charAt(i + 1) ) { //looking for same chars
+                stringBuilder.deleteCharAt(i); //if found, delete
+                i--; //backing to look for one more time and avoid 3 or more dup letters
             }
         }
 
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) {
+    private static String getBWT(String string) { //Burrows–Wheeler transforming method
+//        String string = "java";
+        StringBuilder stringBuilder = new StringBuilder(string);
 
-        System.out.println("Choose an operation: \n" +
+        char[] chars = string.toCharArray();
+
+        String[] strings = new String[chars.length];
+
+        int i=0;
+        for (char c : chars) { //looping chars
+            stringBuilder.append(c); //appending first char to the end
+            stringBuilder.deleteCharAt(0); //delete first char
+            strings[i] = stringBuilder.toString(); //saving result in string array
+            i++;
+        }
+
+        Arrays.sort(strings); //sorting
+
+        StringBuilder builderResult = new StringBuilder();
+
+        for (String s : strings) {
+            builderResult.append(s.charAt(s.length()-1)); //taking last chars of every string from strings array
+        }
+
+        return builderResult.toString();
+    }
+
+    public static void main(String[] args) {
+        /*
+        You can run a program to be sure everything is working...)
+        Please use text tips to choose.
+         */
+        System.out.println("Print number and press ENTER to choose an operation: \n" +
                 "0 Just read and print a text; \n" +
                 "1 Print the text without the duplicates letters; \n" +
                 "2 Print and align the text to the right edge; \n" +
-                "3 Print and align the text to the right edge without the duplicates letters \n");
+                "3 Print and align the text to the right edge without the duplicates letters; \n" +
+                "4 Print Burrows–Wheeler transformed line using your text \n");
 
         Scanner scanner = new Scanner(System.in);
         int choose = scanner.nextInt();
@@ -125,9 +166,13 @@ public class Strings {
                     System.out.println(string);
                 }
                 break;
+            case 4:
+                System.out.println(getBWT(readText()));
+                break;
             default:
                 System.out.println("Your choose is invalid.");
         }
+
     }
 
 }
